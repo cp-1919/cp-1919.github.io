@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+    <link rel="stylesheet" href="../style.css">
+    <script src="../jquery.min.js"></script>
+    <script src="../jquery.mobile-1.4.5.min.js"></script>
+    <script src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <div data-role="page">
+
+            <div data-role="header">
+              <h1>API 测试工具</h1>
+            </div>
+          
+            <div data-role="main" class="ui-content">
+                <input type="text" v-model="data.host" placeholder="HOST">
+                <button @click="change()">SET HEADER</button>
+                <textarea v-if="data.hasHeader" type="text" placeholder="header" v-model="data.header" class="ui-input-text ui-shadow-inset ui-body-inherit ui-corner-all ui-textinput-autogrow" style="height: 52px;"></textarea>
+                <button @click="get()">GET</button>
+                <button @click="post()">POST</button>
+                <br>
+                <h3>RESPONSE</h3><br>
+                <p>{{data.res}}</p>
+                <h3>RESPONSE HEADER</h3><br>
+                <p>{{data.resHeader}}</p>
+                <h6>现在好多网站都限制跨域了，访问不了LOL</h6>
+            </div>
+
+            <div data-role="panel" id="menu">
+                
+            </div>
+          
+          </div>
+
+    </div>
+    <script>
+        const { createApp, ref, reactive, computed, watch, onMounted } = Vue
+
+        const data = ref({
+            host:'https://test.harumoe.cn/api/other/hot?list=baidu,csdn&cache=true&lang=zh-cn(这个api已经不能用了)',
+            hasHeader:false,
+            header:'Access-Control-Allow-Origin: *',
+            res:'',
+            resHeader:'',
+        })
+        const post = ()=>{
+            const xml = new XMLHttpRequest();
+            xml.open("POST",data.value.host);
+            if(data.value.hasHeader=='on'){
+                const h = data.value.header.split(';');
+                for(let i in h){
+                    const [b,f]=i.split(': ');
+                    xml.setRequestHeader(b,f);
+                }
+            }
+            xml.onreadystatechange=()=>{
+                if (xml.readyState === 4 && xml.status === 200) {
+                    data.value.res=xml.responseText;
+                    data.value.resHeader=xml.getAllResponseHeaders();
+                }
+            }
+            xml.send()
+        }
+        const get = ()=>{
+            const xml = new XMLHttpRequest();
+            xml.open("GET",data.value.host);
+            xml.onreadystatechange=()=>{
+                if (xml.readyState === 4 && xml.status === 200) {
+                    data.value.res=xml.responseText;
+                    data.value.resHeader=xml.getAllResponseHeaders();
+                } else {
+                    alert('出错了，Err:' + xml.status);
+                }
+            }
+            xml.send()
+        }
+
+        const app = createApp({
+            setup() {
+                onMounted(() => null)
+                return {
+                    data:data,
+                    post:post,
+                    get:get,
+                    change:()=>{data.value.hasHeader=!data.value.hasHeader;},
+                }
+            },
+        }).mount('#app')
+        console.log(data.value)
+    </script>
+</body>
+
+</html>

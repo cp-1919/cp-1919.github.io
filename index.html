@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery.min.js"></script>
+    <script src="jquery.mobile-1.4.5.min.js"></script>
+    <script src="vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <div data-role="page">
+
+            <div data-role="header">
+              <h1>CP1919</h1>
+            </div>
+          
+            <div data-role="main" class="ui-content">
+              <h1>Welcome to my blog</h1><br>
+              <p>no things yet</p>
+              <a href="html/res1.html">云麓谷作业😘💕💕💕</a>
+            </div>
+
+            <div data-role="panel" id="menu">
+                
+            </div>
+          
+          </div>
+
+    </div>
+    <script>
+        const { createApp, ref, reactive, computed, watch, onMounted } = Vue
+
+        const app = createApp({
+            setup() {
+                onMounted(() => null)
+                return {
+                }
+            },
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
